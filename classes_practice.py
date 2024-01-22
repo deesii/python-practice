@@ -87,7 +87,11 @@ greeter_2 = Greeter("Alan")
 
 print(greeter_2.hello())
 
-# testing the following and seeing what goes wrong...
+# testing the following and seeing what goes wrong... the scope is important,
+
+#the local variables first_name and surname were only avaialble with the __init__() method
+
+#instance variables have a broader scope-  available anywhere within the instance of a class.
 
 class PersonTest():
     def __init__ (self, first_name, surname):
