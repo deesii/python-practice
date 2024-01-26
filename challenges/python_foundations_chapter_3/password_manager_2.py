@@ -70,13 +70,16 @@
 from datetime import datetime
 class PasswordManager2():
     def __init__(self):
+        
         self.service_list = []
         self.service_password_list = []
+        self.service_date_add_on_list = []
     def add(self,service, password):
         
         required_length = 8
         special_characters ="!@$%&"
         service_password_dictionary = {}
+        service_date_added_dictionary = {}
         
         checked_char_length =  len(password) >= required_length and any(char for char in password if char in special_characters)
         
@@ -93,10 +96,13 @@ class PasswordManager2():
 
         if checked_char_length and unique_check == 0:
             service_password_dictionary[service] = password
-            service_password_dictionary["added_on"] = datetime.now()
+            service_date_added_dictionary[service] = datetime.now()
             self.service_password_list.append(service_password_dictionary)
+            self.service_date_add_on_list.append(service_date_added_dictionary)
             print(self.service_password_list)
+            print(self.service_date_add_on_list)
             self.service_list.append(service)
+            
 
         return None
     def remove(self,service):
@@ -112,6 +118,8 @@ class PasswordManager2():
         # update the password for a service, if it is valid
         required_length = 8
         special_characters ="!@$%&"
+
+        #self.add(service,password)
         
         checked_char_length =  len(password) >= required_length and any(char for char in password if char in special_characters)
         
@@ -131,21 +139,57 @@ class PasswordManager2():
                 for key in service_item: # iterating across the key value pairs
                     if key == service:
                         service_item[key] = password
+                        print(self.service_list)
+                        print(self.service_password_list)
                         
         return None
     def list_services(self):
         
         return self.service_list
     
-    def sort_services_by(self, sort_method, method_reverse):
-        pass
+    def sort_services_by(self, sort_method, method_reverse =""):
+        
         #   6. Name: sort_services_by
 #      Arguments: A string, either 'service' or 'added_on',
 #                 (Optional) A string 'reverse' to reverse the order
 #      Returns: a list of all the services for which the user has a password
 #               in the order specified
-    
+        # conditional regarding the sort_method, to carry out the .sort method by the input method
+            # if input is "services", return sorted function return self.service_list.sort()
+        
+        if sort_method == "service":
+            print("sort method is service")
+            if method_reverse == "reverse":
+                print("sort method is service and it will be reversed")
+                print(self.list_services())
+                sorted_by_service =  sorted(self.service_list, reverse = True)
+                return sorted_by_service
+                
+            else:
+                print("sort method is service and it will NOT be reversed")
+                print(self.list_services())
+                sorted_by_service = sorted(self.service_list)
+                return sorted_by_service
+                
+        elif sort_method == "added_on":
 
+            if method_reverse == "reverse":
+                print("sort method is added on and it will be reversed")
+                print(self.list_services())
+                return self.service_list[::-1]
+            else:
+                print("sort method is added on and it will not be reversed")
+                print(self.list_services())
+                return self.service_list
+            
+            # self.service_list : ordered by date added chronologically ordered 
+            # use case , where there is reverse , we do reverse the service list.
+
+            # else input is "ordered by" , iterate across list of dictionaries and sorting the list by date added on.
+
+        # further conditional regarding the method_reverse, you want to reverse the list using sorted(reverse = reverse)
+
+        # 
         # pass
 
     def get_for_service(self, service):
@@ -192,4 +236,8 @@ print(password_manager.update('acebook', '!12345678'))
 
 print(password_manager.list_services())
 print(password_manager.get_for_service("acebloov"))
+print(password_manager.sort_services_by("service" ))
+print(password_manager.sort_services_by("service", "reverse"))
+print(password_manager.sort_services_by("added_on", "reverse"))
+print(password_manager.sort_services_by("added_on"))
 
