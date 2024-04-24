@@ -72,14 +72,13 @@ class PasswordManager2():
     def __init__(self):
         
         self.service_list = []
-        self.service_password_list = []
-        self.service_date_add_on_list = []
+        self.service_info_list = []
+        
     def add(self,service, password):
         
         required_length = 8
         special_characters ="!@$%&"
-        service_password_dictionary = {}
-        service_date_added_dictionary = {}
+        service_info_dictionary = {}
         
         checked_char_length =  len(password) >= required_length and any(char for char in password if char in special_characters)
         
@@ -89,16 +88,23 @@ class PasswordManager2():
         
         unique_check = 0
 
-        for service_item in self.service_password_list:
+        # filter by the the key if "service" = service
+        
+        filtered_list = list(filter(lambda service_dictionary : service_dictionary.get("service") == service, self.service_info_list))
+
+        if len(filtered_list):
+            
+
+        for service_item in self.service_info_list:
             for key in service_item:
-                if service_item[key] == password or key == service:
+                if service_item[key] == password:
                     unique_check += 1
 
         if checked_char_length and unique_check == 0:
-            service_password_dictionary[service] = password
-            service_date_added_dictionary[service] = datetime.now()
-            self.service_password_list.append(service_password_dictionary)
-            self.service_date_add_on_list.append(service_date_added_dictionary)
+            service_info_dictionary["service"] = service
+            service_info_dictionary["password"] = password
+            service_info_dictionary["date_added"] = datetime.now()
+            self.service_password_list.append(service_info_dictionary)
             print(self.service_password_list)
             print(self.service_date_add_on_list)
             self.service_list.append(service)
